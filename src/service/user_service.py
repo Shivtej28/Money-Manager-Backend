@@ -4,6 +4,7 @@ from ..models.data_model import User
 from ..scehmas.request_model import GetUser
 from ..utils.response import Response
 from fastapi.encoders import jsonable_encoder
+from ..utils.jwtauth import create_access_token
 
 class UserService():
     def __init__(self) -> None:
@@ -16,8 +17,10 @@ class UserService():
             return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success= False, message="User already exist. Please Login" )
         db.add(user)
         db.commit()
-        result = GetUser(username=user.username, email=user.email)
-        return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="User Ccreated Successfull", result=result.dict())
+        payload =  {"sub": user.user_id}
+        token = create_access_token(payload=payload)
+        result = GetUser(username=user.username, email=user.email, token=token)
+        return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="User Created Successfully", result=result.dict())
 
     def login_user(self, db: Session, request_model):
         email = request_model.get('email')
@@ -26,7 +29,9 @@ class UserService():
         if not existing_user:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success= False, message="User does not exist. Please Sign up" )
         if existing_user.password_hash == password:
-            result = GetUser(username=existing_user.username, email=existing_user.email)
+            payload =  {"sub": existing_user.user_id}
+            token = create_access_token(payload=payload)
+            result = GetUser(username=existing_user.username, email=existing_user.email, token=token)
             return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="Login Succesfully", result=result.dict())
         else:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success= False, message="Please insert correct email id or password")

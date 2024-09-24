@@ -35,4 +35,5 @@ def create_app():
     
     app.include_router(user.router)
     app.include_router(categories.router)
+    app.include_router(banks.router)
     return app

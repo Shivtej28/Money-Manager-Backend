@@ -1,9 +1,12 @@
+from typing import Any
+
+
 class Response:
     def __init__(
         self,
         is_success=False,
         status_code= int(),
-        result=None,
+        result=Any,
         message=str(),
     ):
      self.is_success = is_success
