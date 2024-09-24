@@ -9,7 +9,7 @@ WORKDIR /src
 COPY . /src
 
 # Install FastAPI and Uvicorn
-RUN pip install -r .\requirements.txt
+RUN pip install -r requirements.txt
 
 # Expose port 8000 for the FastAPI app
 EXPOSE 8000
