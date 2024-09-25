@@ -13,6 +13,8 @@ from starlette.exceptions import ExceptionMiddleware
 class MyHTTPException(HTTPException):
     pass
 
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImV4cCI6MTcyNzM0NDk5OH0.Y7ZgLvepffZV8lF83Ra5Z17ybb4JNIHVb0Dq0iRlBJM"
+
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     result = [error.get('msg') for error in exc.errors()]
     print(result)

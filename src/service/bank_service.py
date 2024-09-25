@@ -26,7 +26,7 @@ class BankService:
     def update_bank(self, db: Session, request_model: CreateBank, user, id):
         bank = db.query(Bank).filter(Bank.bank_id == id).first()
         if not bank:
-            return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Bank Does not Exists")
+            return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Bank Does not Exists", result = None)
         bank.account_type = request_model.account_type
         bank.bank_name = request_model.bank_name
         bank.total_balance = request_model.total_balance

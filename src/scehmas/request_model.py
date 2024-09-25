@@ -3,6 +3,28 @@ from unicodedata import category
 from fastapi import Query
 from pydantic import BaseModel, EmailStr
 from enum import Enum
+from typing import Generic, TypeVar, List, Optional
+from pydantic.generics import GenericModel
+
+# Declare a generic type variable for result
+T = TypeVar("T")
+
+class Response(GenericModel, Generic[T]):
+    is_success: bool
+    result: Optional[T]  # The result can be any type of data
+    message: str
+    status_code: int
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "is_success": False,
+                "result": {},
+                "message": "Success",
+                "status_code": 200
+            }
+        }
+
 
 class UserBase(BaseModel):
     username: str
@@ -24,9 +46,17 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
-class CeateCategory(BaseModel):
-    category: str
-    subcategory : List[str]
+class CategoryTypeEnum(str, Enum):
+    income = "income"
+    expense = "expense"
+
+class CreateSubCategory(BaseModel):
+    subcategory_name : str
+    type_of: CategoryTypeEnum
+
+class CreateCategory(BaseModel):
+    category_name: str
+    sub_category : List[CreateSubCategory]
     type_of: str
 
 class CreateBank(BaseModel):
@@ -41,17 +71,35 @@ class Bank(CreateBank):
     class Config:
         orm_mode = True
 
-class CategoryTypeEnum(str, Enum):
-    income = "income"
-    expense = "expense"
+# class CategoryTypeEnum(str, Enum):
+#     income = "income"
+#     expense = "expense"
 
-class CreateSubCategory(BaseModel):
-    subcategory_name : str
-    type_of: CategoryTypeEnum
+# class CreateSubCategory(BaseModel):
+#     subcategory_name : str
+#     type_of: CategoryTypeEnum
 
-class CreateCategory(BaseModel):
+# class CreateCategory(BaseModel):
+#     category_name : str
+#     type_of: CategoryTypeEnum
+#     sub_category : Optional[List[CreateSubCategory]] 
+
+class UpdateSubCategory(CreateSubCategory):
+    id: int
+
+class UpdateCategory(BaseModel):
     category_name : str
     type_of: CategoryTypeEnum
-    sub_category : Optional[List[CreateSubCategory]]  
+    sub_category : Optional[List[UpdateSubCategory]]
+
+class CategoryResponse(BaseModel):
+    category_id: int
+    category_name: str
+    type_of: str
+    subcategories: List[UpdateSubCategory]
+
+
+
+
 
 
