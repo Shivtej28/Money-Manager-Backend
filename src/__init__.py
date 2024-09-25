@@ -32,7 +32,14 @@ def create_app():
     # app.add_middleware(CustomValidationMiddleware)
 
     app.add_exception_handler(RequestValidationError, handler=validation_exception_handler)
-    
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Allow all origins (for development purposes)
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"]
+    )
+
     app.include_router(user.router)
     app.include_router(categories.router)
     app.include_router(banks.router)

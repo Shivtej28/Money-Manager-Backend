@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Optional
 from unicodedata import category
 from fastapi import Query
 from pydantic import BaseModel, EmailStr
+from enum import Enum
 
 class UserBase(BaseModel):
     username: str
@@ -40,5 +41,17 @@ class Bank(CreateBank):
     class Config:
         orm_mode = True
 
+class CategoryTypeEnum(str, Enum):
+    income = "income"
+    expense = "expense"
+
+class CreateSubCategory(BaseModel):
+    subcategory_name : str
+    type_of: CategoryTypeEnum
+
+class CreateCategory(BaseModel):
+    category_name : str
+    type_of: CategoryTypeEnum
+    sub_category : Optional[List[CreateSubCategory]]  
 
 
