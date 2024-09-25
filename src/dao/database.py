@@ -3,7 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # DATABASE_URL = "sqlite:///./money_manager.db"
-DATABASE_URL = "postgresql://myuser:mypassword@localhost/moneymanagerdb"
+DATABASE_URL = "postgresql://myuser:UlyQEliEJAJbqgttFRDo9KTKWbUhLwZN@dpg-crq2i0l6l47c73askj5g-a.oregon-postgres.render.com/moneymanagerdb_4d4y"
+#DATABASE_URL = "postgresql://myuser:mypassword@localhost/moneymanagerdb"
 
 engine = create_engine(DATABASE_URL)
 
