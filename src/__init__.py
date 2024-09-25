@@ -3,12 +3,9 @@ from src.routers import user, categories, banks, transaction
 from .models import data_model
 from .dao.database import engine
 from fastapi.responses import JSONResponse
-from src.utils.middleware.custom_validation_middleware import CustomValidationMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import PlainTextResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.exceptions import ExceptionMiddleware
+
 
 class MyHTTPException(HTTPException):
     pass
