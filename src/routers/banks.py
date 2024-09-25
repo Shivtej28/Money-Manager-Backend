@@ -1,4 +1,5 @@
 
+from urllib import response
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from ..scehmas.request_model import CreateBank
@@ -20,3 +21,13 @@ def create_bank(bank : CreateBank, db: Session = Depends(get_db), user = Depends
 def get_all_banks(db: Session = Depends(get_db), user = Depends(decode_jwt_token)):
     response = bank_service.get_all_banks(db, user)
     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response)) 
+
+@router.put("/{id:int}")
+def update_bank(id: int,bank : CreateBank, db: Session = Depends(get_db), user = Depends(decode_jwt_token)):
+    response = bank_service.update_bank(db, bank, user, id)
+    return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))
+
+@router.delete("/{id}")
+def delete_bank(id: int, db: Session = Depends(get_db), user = Depends(decode_jwt_token)):
+    response = bank_service.delete_bank(db, user, id)
+    return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))    
