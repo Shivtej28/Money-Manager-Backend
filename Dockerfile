@@ -3,10 +3,10 @@ FROM python:3.10
 RUN pip install --upgrade pip
 RUN pip install db-sqlite3
 # Set the working directory in the container
-WORKDIR /money-maanager-api
+WORKDIR /src
 
 # Copy the current directory contents into the container
-COPY . /money-manager-api
+COPY . /src
 
 # Install FastAPI and Uvicorn
 RUN pip install -r ./requirements.txt
