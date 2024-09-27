@@ -20,6 +20,7 @@ class Category(Base):
     type_of = Column(String)
 
     subcategories = relationship("Subcategory", back_populates="category")
+    transactions = relationship("Transaction", back_populates="category")
 
 class Subcategory(Base):
     __tablename__ = "subcategories"
@@ -37,14 +38,18 @@ class Transaction(Base):
     __tablename__ = "transactions"
     transaction_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.user_id'))
+    category_id = Column(Integer, ForeignKey('categories.category_id'))
     subcategory_id = Column(Integer, ForeignKey('subcategories.subcategory_id'))
     amount = Column(Float)
     transaction_type = Column(String)  # 'income' or 'expense'
     transaction_date = Column(Date)
     description = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
+    bank_id = Column(Integer, ForeignKey('banks.bank_id'))
 
+    category = relationship("Category", back_populates="transactions")
     subcategory = relationship("Subcategory", back_populates="transactions")
+    bank = relationship("Bank", back_populates="transactions")
 
 class Loan(Base):
     __tablename__ = "loans"
@@ -76,3 +81,5 @@ class Bank(Base):
     total_balance = Column(Float)
     account_type = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    transactions = relationship("Transaction", back_populates="bank")

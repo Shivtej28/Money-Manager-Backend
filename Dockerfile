@@ -11,6 +11,9 @@ COPY . /src
 # Install FastAPI and Uvicorn
 RUN pip install -r requirements.txt
 
+RUN alembic revision --autogenerate -m "description of change"
+# Run database migrations
+RUN alembic upgrade head  # Make sure alembic is installed in your requirements.txt
 # Expose port 8000 for the FastAPI app
 EXPOSE 8000
 

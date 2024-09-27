@@ -14,14 +14,15 @@ class BankService:
         all_banks = db.query(Bank).filter(Bank.user_id == user_id).all()
         if all_banks.count == 0:
             return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Please add Bank Details")
-        return Response(status_code=status.HTTP_200_OK, is_success= True, message="Get ALl banks Successfully", result=all_banks)
+        print(all_banks[0].__dict__)
+        return Response(status_code=status.HTTP_200_OK, is_success= True, message="Get All banks Successfully", result=all_banks)
 
     def create_bank(self, db: Session, request_model, user):
         bank_to_create = Bank(user_id = user.get("sub"), **request_model)
         db.add(bank_to_create)
         db.commit()
         result = self.get_all_banks(db, user)
-        return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="bank Detail Added Successfully", result=result.result)
+        return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="Bank Detail Added Successfully", result=result.result)
 
     def update_bank(self, db: Session, request_model: CreateBank, user, id):
         bank = db.query(Bank).filter(Bank.bank_id == id).first()

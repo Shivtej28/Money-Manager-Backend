@@ -23,9 +23,9 @@ class CategoryService:
             user_id=user_id, category_name=category.category_name, type_of=category.type_of)
         db.add(db_category)
         db.commit()
-        for sub_category in category.sub_category:
+        for sub_category in category.sub_categories:
             db_sub_catgeory = Subcategory(category_id=db_category.category_id, user_id=user_id,
-                                          subcategory_name=sub_category.subcategory_name, type_of=sub_category.type_of)
+                                          subcategory_name=sub_category, type_of=db_category.type_of)
             db.add(db_sub_catgeory)
 
         db.commit()
@@ -36,7 +36,6 @@ class CategoryService:
         user_id = user.get("sub")
         categories = db.query(Category).filter(
             Category.user_id == user_id).all()
-        print(categories[0].subcategories)
         result = []
         for category in categories:
             to_add_sub_category = [UpdateSubCategory(

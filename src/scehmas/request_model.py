@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from typing import List, Optional
 from unicodedata import category
 from fastapi import Query
@@ -52,11 +53,10 @@ class CategoryTypeEnum(str, Enum):
 
 class CreateSubCategory(BaseModel):
     subcategory_name : str
-    type_of: CategoryTypeEnum
 
 class CreateCategory(BaseModel):
     category_name: str
-    sub_category : List[CreateSubCategory]
+    sub_categories : List[str]
     type_of: str
 
 class CreateBank(BaseModel):
@@ -69,20 +69,7 @@ class Bank(CreateBank):
     user_id: int
 
     class Config:
-        orm_mode = True
-
-# class CategoryTypeEnum(str, Enum):
-#     income = "income"
-#     expense = "expense"
-
-# class CreateSubCategory(BaseModel):
-#     subcategory_name : str
-#     type_of: CategoryTypeEnum
-
-# class CreateCategory(BaseModel):
-#     category_name : str
-#     type_of: CategoryTypeEnum
-#     sub_category : Optional[List[CreateSubCategory]] 
+        orm_mode = True 
 
 class UpdateSubCategory(CreateSubCategory):
     id: int
@@ -97,6 +84,27 @@ class CategoryResponse(BaseModel):
     category_name: str
     type_of: str
     subcategories: List[UpdateSubCategory]
+
+
+class TransactionBase(BaseModel):
+    amount: float
+    transaction_type: str
+    transaction_date: date
+    description: str = ""
+    bank_id: int
+    category_id: int = None
+    subcategory_id: int = None
+
+    class Config:
+        from_attributes = True
+
+class TransactionResponse(TransactionBase):
+    transaction_id: int
+    user_id: int
+
+
+
+
 
 
 
