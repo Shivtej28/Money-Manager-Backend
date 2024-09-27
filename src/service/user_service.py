@@ -34,6 +34,6 @@ class UserService():
             result = GetUser(username=existing_user.username, email=existing_user.email, token=token)
             return Response(status_code=status.HTTP_201_CREATED, is_success= True, message="Login Succesfully", result=result)
         else:
-            return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success= False, message="Please insert correct email id or password")
+            return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success= False, message="Please insert correct email id or password", result = None)
 
 user_service = UserService()

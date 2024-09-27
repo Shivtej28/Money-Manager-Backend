@@ -9,7 +9,7 @@ from ..scehmas.request_model import CreateCategory, UpdateCategory, Response, Ca
 from ..utils.jwtauth import decode_jwt_token
 from ..service.categories_service import category_service
 
-router = APIRouter(prefix="/api/categeroies", tags=["Categories"])
+router = APIRouter(prefix="/api/categories", tags=["Categories"])
 
 
 @router.post("/", response_model=Response)
