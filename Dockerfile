@@ -9,7 +9,7 @@ WORKDIR /money-maanager-api
 COPY . /money-manager-api
 
 # Install FastAPI and Uvicorn
-RUN pip install -r requirements.txt
+RUN pip install -r ./requirements.txt
 
 # RUN alembic revision --autogenerate -m "description of change"
 # Run database migrations
