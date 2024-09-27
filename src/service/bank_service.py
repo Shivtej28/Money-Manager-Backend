@@ -14,7 +14,6 @@ class BankService:
         all_banks = db.query(Bank).filter(Bank.user_id == user_id).all()
         if all_banks.count == 0:
             return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Please add Bank Details")
-        print(all_banks[0].__dict__)
         return Response(status_code=status.HTTP_200_OK, is_success= True, message="Get All banks Successfully", result=all_banks)
 
     def create_bank(self, db: Session, request_model, user):

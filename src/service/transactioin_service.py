@@ -78,6 +78,9 @@ class TransactionService():
             update_bank.total_balance -= db_transaction.amount
         elif db_transaction.transaction_type == CategoryTypeEnum.expense:
             update_bank.total_balance += db_transaction.amount
+        
+        db.commit()
+        db.refresh(update_bank)
 
         
         db_transaction.amount = transaction.amount
@@ -88,6 +91,8 @@ class TransactionService():
         db_transaction.transaction_date = transaction.transaction_date
         db_transaction.description = transaction.description
 
+        update_bank = db.query(Bank).filter(
+            Bank.bank_id == db_transaction.bank_id).first()
         if transaction.transaction_type == CategoryTypeEnum.income:
             update_bank.total_balance += db_transaction.amount
         elif transaction.transaction_type == CategoryTypeEnum.expense:
