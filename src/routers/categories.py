@@ -26,3 +26,8 @@ def get_all_categories(db: Session = Depends(get_db), user = Depends(decode_jwt_
 def update_categories(id: int, category: UpdateCategory, db: Session = Depends(get_db), user = Depends(decode_jwt_token)):
     response = category_service.update_categories(id, db, user, category)
     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))
+
+# @router.delete("/{id:int}")
+# def delete_category(id:int, db:Session = Depends(get_db), user = Depends(decode_jwt_token)):
+#     response = category_service.delete_category(id, db, user)
+#     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))

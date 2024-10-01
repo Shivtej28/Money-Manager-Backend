@@ -21,7 +21,7 @@ def get_all_transactions(db:Session = Depends(get_db), user = Depends(decode_jwt
     
     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))
 
-@router.post("/")
+@router.post("/", response_model=Response)
 def create_transaction(transaction: TransactionBase , db: Session = Depends(get_db), user = Depends(decode_jwt_token)):
     add_transaction = transaction.dict()
     response = transaction_service.create_transaction(add_transaction,db, user)
@@ -29,7 +29,7 @@ def create_transaction(transaction: TransactionBase , db: Session = Depends(get_
     #print(response)
     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))
 
-@router.put("/{id}")
+@router.put("/{id}", response_model=Response)
 def update_transaction(id: int, transaction: TransactionBase, db:Session = Depends(get_db), user = Depends(decode_jwt_token)):
     response = transaction_service.update_transaction(id, transaction, db, user)
     return JSONResponse(status_code=response.status_code, content=jsonable_encoder(response))
