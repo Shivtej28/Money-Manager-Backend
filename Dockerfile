@@ -2,7 +2,8 @@
 FROM python:3.10
 RUN pip install --upgrade pip
 RUN pip install db-sqlite3
-RUN pip install psycopg2 
+RUN pip install psycopg2
+RUN pip install alembic 
 # Set the working directory in the container
 WORKDIR /src
 

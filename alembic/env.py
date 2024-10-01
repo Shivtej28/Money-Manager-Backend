@@ -8,10 +8,10 @@ from src.dao.database import Base
 from dotenv import load_dotenv
 import os
 
-# env_file_path = os.getcwd()+"\\src\\.env"
+#3env_file_path = os.getcwd()+"\\src\\.env"
 # print("File-----------------")
 # print(env_file_path)
-# load_dotenv(dotenv_path=env_file_path)
+#load_dotenv(dotenv_path=env_file_path)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
