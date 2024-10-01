@@ -8,6 +8,7 @@ env_file_path = os.getcwd()+"\\src\\.env"
 load_dotenv(dotenv_path=env_file_path)
 #DATABASE_URL = "sqlite:///./money_manager.db"
 DATABASE_URL = os.getenv("DATABASE_URL")
+print("-------------------------------------------------------------"+ DATABASE_URL)
 
 # F:\Personal Projects\Money Manager\money-manager-api\money-manager-api\src\.env
 # F:\Personal Projects\Money Manager\money-manager-api\money-manager-api\src\.env
