@@ -40,6 +40,10 @@ class CategoryService:
         categories = db.query(Category).filter(
             Category.user_id == user_id).all()
         result = []
+        if len(categories) == 0:
+            Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False,
+                     message="Please Add Category", result=None)
+                     
         for category in categories:
             to_add_sub_category = [UpdateSubCategory(
                 id=sub.subcategory_id, subcategory_name=sub.subcategory_name, type_of=sub.type_of) for sub in category.subcategories]
@@ -47,9 +51,7 @@ class CategoryService:
             to_add = CategoryResponse(category_id=category.category_id, category_name=category.category_name,
                                       type_of=category.type_of, subcategories=to_add_sub_category)
             result.append(to_add)
-        if len(categories) == 0:
-            Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False,
-                     message="Please Add Category", result=None)
+        
         return Response(status_code=status.HTTP_200_OK, is_success=True, message="Get All Categories Successfully.", result=result)
 
     def update_categories(self, id, db: Session, user, category: UpdateCategory):
