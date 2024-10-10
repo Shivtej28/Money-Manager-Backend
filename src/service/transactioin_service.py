@@ -19,7 +19,7 @@ class TransactionService():
         if len(all_transactions) == 0:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success=False, message="Please Add Transactions", result=None)
         print("In Get AL ---------------------------------",
-              all_transactions.count)
+              all_transactions)
 
         result = [TransactionResponse.from_orm(
             transaction) for transaction in all_transactions]

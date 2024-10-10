@@ -93,7 +93,7 @@ class TransactionBase(BaseModel):
     description: str = ""
     bank_id: int
     category_id: int = None
-    subcategory_id: int = None
+    subcategory_id: Optional[int] = None
 
     class Config:
         from_attributes = True

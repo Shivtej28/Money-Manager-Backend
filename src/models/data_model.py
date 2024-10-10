@@ -39,7 +39,7 @@ class Transaction(Base):
     transaction_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.user_id'))
     category_id = Column(Integer, ForeignKey('categories.category_id'))
-    subcategory_id = Column(Integer, ForeignKey('subcategories.subcategory_id'))
+    subcategory_id = Column(Integer, ForeignKey('subcategories.subcategory_id'), nullable=True)
     amount = Column(Float)
     transaction_type = Column(String)  # 'income' or 'expense'
     transaction_date = Column(Date)
