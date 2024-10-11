@@ -73,7 +73,7 @@ class CategoryService:
                 db_subcategory.subcategory_name = sub_category.subcategory_name
             else:
                 db_sub_catgeory = Subcategory(category_id=db_category.category_id, user_id=user_id,
-                                              subcategory_name=sub_category.subcategory_name, type_of=sub_category.type_of)
+                                              subcategory_name=sub_category.subcategory_name, type_of=category.type_of)
                 db.add(db_sub_catgeory)
             
         db.commit()

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
-from src.routers import user, categories, banks, transaction
+from src.routers import user, categories, banks, transaction, dashboard
 from .models import data_model
 from .dao.database import engine
 from fastapi.responses import JSONResponse
@@ -40,7 +40,9 @@ def create_app():
     )
 
     app.include_router(user.router)
+    app.include_router(dashboard.router)
     app.include_router(categories.router)
     app.include_router(banks.router)
     app.include_router(transaction.router)
+    
     return app

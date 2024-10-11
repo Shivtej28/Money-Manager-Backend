@@ -72,7 +72,7 @@ class Bank(CreateBank):
         orm_mode = True 
 
 class UpdateSubCategory(CreateSubCategory):
-    id: int
+    id: Optional[int] = None
 
 class UpdateCategory(BaseModel):
     category_name : str
@@ -90,7 +90,7 @@ class TransactionBase(BaseModel):
     amount: float
     transaction_type: str
     transaction_date: date
-    description: str = ""
+    description: Optional[str] = None
     bank_id: int
     category_id: int = None
     subcategory_id: Optional[int] = None
@@ -101,6 +101,13 @@ class TransactionBase(BaseModel):
 class TransactionResponse(TransactionBase):
     transaction_id: int
     user_id: int
+
+class MainDashboardResponse(BaseModel):
+    total_income : float
+    total_expense: float
+    total_savings: float
+    saving_percentage : str
+
 
 
 
