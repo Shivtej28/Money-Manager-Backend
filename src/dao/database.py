@@ -6,8 +6,10 @@ import os
 
 env_file_path = os.getcwd()+"\\src\\.env"
 load_dotenv(dotenv_path=env_file_path)
+
+DATABASE_URL="postgresql://shivtej:Shivtej28@money-manager-database.cetmy26qsy18.us-east-1.rds.amazonaws.com:5432/moneymanager"
 #DATABASE_URL = "sqlite:///./money_manager.db"
-DATABASE_URL = os.getenv("DATABASE_URL")
+#DATABASE_URL = "mssql+pyodbc://Server=DESKTOP-D1MLGPR\SQLEXPRESS;Database=master;Trusted_Connection=True;driver=ODBC+Driver+17+for+SQL+Server;Trusted_Connection=True;"
 print("-------------------------------------------------------------"+ DATABASE_URL)
 
 # F:\Personal Projects\Money Manager\money-manager-api\money-manager-api\src\.env

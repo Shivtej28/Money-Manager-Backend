@@ -1,4 +1,5 @@
 
+from unittest import result
 from fastapi import status
 from sqlalchemy.orm import Session
 from ..models.data_model import Bank
@@ -13,7 +14,7 @@ class BankService:
         user_id = user.get("sub")
         all_banks = db.query(Bank).filter(Bank.user_id == user_id).all()
         if len(all_banks) == 0:
-            return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Please add Bank Details")
+            return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False, message="Please add Bank Details", result=None)
         return Response(status_code=status.HTTP_200_OK, is_success= True, message="Get All banks Successfully", result=all_banks)
 
     def create_bank(self, db: Session, request_model, user):
