@@ -18,8 +18,9 @@ RUN pip install -r ./requirements.txt
 # Expose port 8000 for the FastAPI app
 EXPOSE 8000
 
-CMD alembic revision --autogenerate -m "description of change"
-CMD alembic upgrade head
+# CMD alembic revision --autogenerate -m "description of change"
+# CMD alembic upgrade head
 
 # Command to run FastAPI with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD gunicorn -w 4 -k uvicorn.workers.UvicornWorker src.main:app
+#CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
