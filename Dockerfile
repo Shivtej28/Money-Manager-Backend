@@ -22,5 +22,5 @@ EXPOSE 8000
 # CMD alembic upgrade head
 
 # Command to run FastAPI with Uvicorn
-CMD gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+CMD gunicorn main:app --workers=4 --worker-class=uvicorn.workers.UvicornWorker
 #CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
