@@ -17,7 +17,7 @@ class Response(GenericModel, Generic[T]):
     status_code: int
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "is_success": False,
                 "result": {},
@@ -45,7 +45,7 @@ class User(UserBase):
     id : int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CategoryTypeEnum(str, Enum):
     income = "income"
@@ -69,7 +69,7 @@ class Bank(CreateBank):
     user_id: int
 
     class Config:
-        orm_mode = True 
+        from_attributes = True 
 
 class UpdateSubCategory(CreateSubCategory):
     id: Optional[int] = None
