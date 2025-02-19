@@ -108,7 +108,7 @@ class TransactionService():
         user_id = 1
         add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=1, subcategory_id=1,
                                                             amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
-                                                            description=obj.description, bank_id=1), transactions))
+                                                            description=obj.description, bank_id=1), transactions))p
 
         print("In Service", add_transactions)
         db.add_all(add_transactions)
