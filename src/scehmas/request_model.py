@@ -98,6 +98,16 @@ class TransactionBase(BaseModel):
     class Config:
         from_attributes = True
 
+class UploadTransaction(BaseModel):
+    amount: float
+    transaction_type: str
+    transaction_date: date
+    description: Optional[str] = None
+    bank_id: int = None
+    category_id: int = None
+    subcategory_id: Optional[int] = None
+
+
 class TransactionResponse(TransactionBase):
     transaction_id: int
     user_id: int

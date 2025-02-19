@@ -1,5 +1,6 @@
 
-from ..scehmas.request_model import Response, CategoryTypeEnum, TransactionResponse,TransactionBase
+from typing import List
+from ..scehmas.request_model import Response, CategoryTypeEnum, TransactionResponse, TransactionBase, UploadTransaction
 from sqlalchemy.orm import Session
 from ..models.data_model import Bank, Transaction
 from sqlalchemy import and_
@@ -68,7 +69,8 @@ class TransactionService():
 
     def update_transaction(self, id, transaction: TransactionBase, db: Session, user):
         user_id = user.get("sub")
-        db_transaction = db.query(Transaction).filter(and_(Transaction.transaction_id == id, Transaction.user_id == user_id)).first()
+        db_transaction = db.query(Transaction).filter(
+            and_(Transaction.transaction_id == id, Transaction.user_id == user_id)).first()
         if not db_transaction:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success=False, message="Transaction does not exist", result=None)
         update_bank = db.query(Bank).filter(
@@ -77,11 +79,10 @@ class TransactionService():
             update_bank.total_balance -= db_transaction.amount
         elif db_transaction.transaction_type == CategoryTypeEnum.expense:
             update_bank.total_balance += db_transaction.amount
-        
+
         db.commit()
         db.refresh(update_bank)
 
-        
         db_transaction.amount = transaction.amount
         db_transaction.bank_id = transaction.bank_id
         db_transaction.category_id = transaction.category_id
@@ -101,12 +102,18 @@ class TransactionService():
         db.refresh(db_transaction)
         db.refresh(update_bank)
         response = self.get_all_transactions(db, user)
-        return Response(status_code=status.HTTP_202_ACCEPTED, is_success=True, message="Transaction Updated Successfully.", result= response.result)
+        return Response(status_code=status.HTTP_202_ACCEPTED, is_success=True, message="Transaction Updated Successfully.", result=response.result)
 
+    def upload_file(self, transactions: List[UploadTransaction], db: Session):
+        user_id = 1
+        add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=1, subcategory_id=1,
+                                                            amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
+                                                            description=obj.description, bank_id=1), transactions))
 
-       
-
-
+        print("In Service", add_transactions)
+        db.add_all(add_transactions)
+        db.commit()
+        return True
 
 
 transaction_service = TransactionService()

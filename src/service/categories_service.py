@@ -41,7 +41,7 @@ class CategoryService:
             Category.user_id == user_id).all()
         result = []
         if len(categories) == 0:
-            Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False,
+            return Response(status_code=status.HTTP_404_NOT_FOUND, is_success=False,
                      message="Please Add Category", result=None)
                      
         for category in categories:
