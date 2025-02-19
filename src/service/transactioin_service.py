@@ -108,11 +108,22 @@ class TransactionService():
         user_id = 1
         add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=1, subcategory_id=1,
                                                             amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
-                                                            description=obj.description, bank_id=1), transactions))p
+                                                            description=obj.description, bank_id=1), transactions))
 
         print("In Service", add_transactions)
         db.add_all(add_transactions)
         db.commit()
+
+        for transaction in transactions:
+            bank = db.query(Bank).filter(Bank.bank_id == transaction.bank_id).first()
+            if bank:
+                # Increase for 'income', decrease for 'expense'
+                if transaction.transaction_type.lower() == "income":
+                    bank.total_balance += transaction.amount
+                elif transaction.transaction_type.lower() == "expense":
+                    bank.total_balance -= transaction.amount
+
+        db.commit()  # Commit balance updates
         return True
 
 
