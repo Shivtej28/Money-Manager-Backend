@@ -104,18 +104,18 @@ class TransactionService():
         response = self.get_all_transactions(db, user)
         return Response(status_code=status.HTTP_202_ACCEPTED, is_success=True, message="Transaction Updated Successfully.", result=response.result)
 
-    def upload_file(self, transactions: List[UploadTransaction], db: Session):
-        user_id = 1
+    def upload_file(self, transactions: List[UploadTransaction], db: Session, user):
+        user_id = user.get("sub")
         add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=1, subcategory_id=1,
                                                             amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
                                                             description=obj.description, bank_id=1), transactions))
 
-        print("In Service", add_transactions)
         db.add_all(add_transactions)
         db.commit()
 
         for transaction in transactions:
-            bank = db.query(Bank).filter(Bank.bank_id == transaction.bank_id).first()
+            bank = db.query(Bank).filter(
+                Bank.bank_id == transaction.bank_id).first()
             if bank:
                 # Increase for 'income', decrease for 'expense'
                 if transaction.transaction_type.lower() == "income":
