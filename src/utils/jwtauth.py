@@ -20,7 +20,7 @@ def decode_jwt_token(token: str):
     """Decode and verify the JWT token."""
     try:
         payload = jwt.decode(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImV4cCI6MTc0MDI4MDUxMX0.HXqe9pKW32CeLnmjKHkatbXn4pC0r-lyVL0kHOrnD7Q", SECRET_KEY, algorithms=[ALGORITHM])
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImV4cCI6MTc2MzExNjQ4Mn0.4Yyyu4CGIwPoVwkkdF8bqvrLLchQtdoxvzpcx25cHH0", SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
