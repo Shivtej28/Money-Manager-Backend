@@ -11,8 +11,7 @@ load_dotenv(dotenv_path=env_file_path)
 # DATABASE_URL="postgresql://postgres.itwetgwiwyimperdatby:Shivtej28@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
 
 # Direct connection to the database. Used for migrations.Shivtejdeshmukh
-DATABASE_URL = "postgresql://postgres.itwetgwiwyimperdatby:Shivtejdeshmukh@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
-
+DATABASE_URL = os.getenv("DATABASE_URL")
 # DATABASE_URL = "postgresql://postgres.itwetgwiwyimperdatby:Shivtej28@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
 # DATABASE_URL = "sqlite:///./money_manager.db"
 # DATABASE_URL = "https://itwetgwiwyimperdatby.supabase.co/storage/v1/object/public/Money%20Manager//money_manager.db"

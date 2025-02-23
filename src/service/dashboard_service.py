@@ -36,7 +36,6 @@ class DashboardService:
         savings_percentage = round((total_savings/total_income)*100, 2)
         result = MainDashboardResponse(total_expense=round(total_expense, 2), total_income=round(total_income, 2),
                                        total_savings=total_savings, saving_percentage=str(savings_percentage) + "%")
-        print(result)
         return Response(status_code=status.HTTP_200_OK, is_success=True, message="Main Dashboard Success", result=result)
 
     def get_all_details(self, db: Session, user):

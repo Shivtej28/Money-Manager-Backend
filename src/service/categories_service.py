@@ -78,7 +78,7 @@ class CategoryService:
 
         db.commit()
         db.refresh(db_category)
-        return Response(status_code=status.HTTP_201_CREATED, is_success=True, message="Category Created Successfully", result=None)
+        return Response(status_code=status.HTTP_201_CREATED, is_success=True, message="Category Updated Successfully", result=None)
 
     def delete_category(self, id, db: Session, user):
         user_id = user.get("sub")
