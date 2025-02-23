@@ -48,7 +48,7 @@ def delete_transaction(id: int, db: Session = Depends(get_db), user=Depends(deco
 
 
 @router.post("/upload-statement")
-async def upload_statment(file: UploadFile, db: Session = Depends(get_db)):
+async def upload_statment(file: UploadFile, db: Session = Depends(get_db), user=Depends(decode_jwt_token)):
     if not (file.filename.endswith(".xls") or file.filename.endswith(".xlsx")):
         raise HTTPException(
             status_code=400, detail="Invalid file format. Only .xls and .xlsx files are allowed.")
@@ -72,6 +72,6 @@ async def upload_statment(file: UploadFile, db: Session = Depends(get_db)):
                               category_id=1,
                               subcategory_id=1)
         transactions.append(t)
-    response = transaction_service.upload_file(transactions, db)
+    response = transaction_service.upload_file(transactions, db, user)
 
     return response

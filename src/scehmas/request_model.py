@@ -66,6 +66,9 @@ class CreateCategory(BaseModel):
     sub_categories: List[str]
     type_of: str
 
+    class Config:
+        from_attributes = True
+
 
 class CreateBank(BaseModel):
     bank_name: str

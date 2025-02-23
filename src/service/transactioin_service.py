@@ -3,7 +3,7 @@ from typing import List
 from ..scehmas.request_model import Response, CategoryTypeEnum, TransactionResponse, TransactionBase, UploadTransaction
 from sqlalchemy.orm import Session
 from ..models.data_model import Bank, Transaction
-from sqlalchemy import and_
+from sqlalchemy import and_, exists
 from fastapi import status
 
 
@@ -106,25 +106,75 @@ class TransactionService():
 
     def upload_file(self, transactions: List[UploadTransaction], db: Session, user):
         user_id = user.get("sub")
-        add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=1, subcategory_id=1,
-                                                            amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
-                                                            description=obj.description, bank_id=1), transactions))
 
-        db.add_all(add_transactions)
-        db.commit()
+        # List to store transactions that need to be inserted (non-duplicate)
+        add_transactions = []
 
-        for transaction in transactions:
-            bank = db.query(Bank).filter(
-                Bank.bank_id == transaction.bank_id).first()
-            if bank:
-                # Increase for 'income', decrease for 'expense'
-                if transaction.transaction_type.lower() == "income":
-                    bank.total_balance += transaction.amount
-                elif transaction.transaction_type.lower() == "expense":
-                    bank.total_balance -= transaction.amount
+        # Loop through the transactions
+        for obj in transactions:
+            # Check if the transaction already exists (based on fields like amount, date, description)
+            is_existing = db.query(exists().where(
+                Transaction.user_id == user_id,
+                Transaction.transaction_date == obj.transaction_date,
+                Transaction.amount == obj.amount,
+                Transaction.description == obj.description
+            )).scalar()
+            # If transaction does not exist, add it to the list of new transactions
+            if not is_existing:
+                # Create the transaction object
+                new_transaction = Transaction(
+                    user_id=user_id,
+                    category_id=2 if obj.transaction_type.lower() == "income" else 1,
+                    subcategory_id=6 if obj.transaction_type.lower() == "income" else 1,
+                    amount=obj.amount,
+                    transaction_type=obj.transaction_type,
+                    transaction_date=obj.transaction_date,
+                    description=obj.description,
+                    bank_id=1
+                )
+                add_transactions.append(new_transaction)
 
-        db.commit()  # Commit balance updates
-        return True
+        # Only add the transactions that don't already exist
+        if add_transactions:
+            db.add_all(add_transactions)
+            db.commit()
+
+            # Update bank balances
+            for transaction in add_transactions:
+                bank = db.query(Bank).filter(
+                    Bank.bank_id == transaction.bank_id).first()
+                if bank:
+                    if transaction.transaction_type.lower() == "income":
+                        bank.total_balance += transaction.amount
+                    elif transaction.transaction_type.lower() == "expense":
+                        bank.total_balance -= transaction.amount
+
+            db.commit()  # Commit balance updates
+
+            return Response(status_code=status.HTTP_202_ACCEPTED, is_success=True, message="File Uploaded Successfully.", result=None)
+        else:
+            return Response(status_code=status.HTTP_400_BAD_REQUEST, is_success=False, message="No new transactions to upload.", result=None)
+    # def upload_file(self, transactions: List[UploadTransaction], db: Session, user):
+    #     user_id = user.get("sub")
+    #     add_transactions = list(map(lambda obj: Transaction(user_id=user_id, category_id=2 if obj.transaction_type.lower() == "income" else 1, subcategory_id=6 if obj.transaction_type.lower() == "income" else 1,
+    #                                                         amount=obj.amount, transaction_type=obj.transaction_type, transaction_date=obj.transaction_date,
+    #                                                         description=obj.description, bank_id=1), transactions))
+
+    #     db.add_all(add_transactions)
+    #     db.commit()
+
+    #     for transaction in add_transactions:
+    #         bank = db.query(Bank).filter(
+    #             Bank.bank_id == transaction.bank_id).first()
+    #         if bank:
+    #             # Increase for 'income', decrease for 'expense'
+    #             if transaction.transaction_type.lower() == "income":
+    #                 bank.total_balance += transaction.amount
+    #             elif transaction.transaction_type.lower() == "expense":
+    #                 bank.total_balance -= transaction.amount
+
+    #     db.commit()  # Commit balance updates
+    #     return Response(status_code=status.HTTP_202_ACCEPTED, is_success=True, message="File Uploaded Successfully.", result=None)
 
 
 transaction_service = TransactionService()

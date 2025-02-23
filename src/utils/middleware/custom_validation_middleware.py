@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
+
 class CustomValidationMiddleware:
     def __init__(self, app: FastAPI):
         self.app = app
@@ -14,12 +15,13 @@ class CustomValidationMiddleware:
             try:
                 # Call the next middleware or request handler
                 response = await self.app(scope, receive, send)
-
+                print("Responsne-----------", response)
                 # Check if the response is valid and send it
                 if response is not None:
                     await response(scope, receive, send)
             except ValidationError as exc:
                 # Handle the ValidationError here
+                print("Error-----------", exc.errors())
                 response = JSONResponse(
                     status_code=422,
                     content={
@@ -37,7 +39,7 @@ class CustomValidationMiddleware:
                 )
                 await response(scope, receive, send)
         else:
-            await self.app(scope, receive, send) 
+            await self.app(scope, receive, send)
     # async def __call__(self, scope, receive, send):
     #     if scope["type"] == "http":
     #         request = Request(scope, receive)
@@ -59,4 +61,4 @@ class CustomValidationMiddleware:
     #             )
     #             await response(scope, receive, send)
     #     else:
-    #         await self.app(scope, receive, send) 
+    #         await self.app(scope, receive, send)
