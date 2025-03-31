@@ -129,6 +129,21 @@ class TransactionResponse(TransactionBase):
     user_id: int
 
 
+class TransactionResponseNew(BaseModel):
+    transaction_id: int
+    user_id: int
+    amount: float
+    transaction_type: str
+    transaction_date: date
+    description: Optional[str] = None
+    bank_id: str
+    category_id: str = None
+    subcategory_id: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
 class MainDashboardResponse(BaseModel):
     total_income: float
     total_expense: float

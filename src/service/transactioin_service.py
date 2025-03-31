@@ -1,6 +1,6 @@
 
 from typing import List
-from ..scehmas.request_model import Response, CategoryTypeEnum, TransactionResponse, TransactionBase, UploadTransaction
+from ..scehmas.request_model import Response, CategoryTypeEnum, TransactionResponse, TransactionBase, UploadTransaction, TransactionResponseNew
 from sqlalchemy.orm import Session
 from ..models.data_model import Bank, Transaction
 from sqlalchemy import and_, exists
@@ -21,8 +21,20 @@ class TransactionService():
         print("In Get AL ---------------------------------",
               all_transactions)
 
-        result = [TransactionResponse.from_orm(
-            transaction) for transaction in all_transactions]
+        result = [
+            TransactionResponseNew(
+                transaction_id=t.transaction_id,
+                user_id=t.user_id,
+                amount=t.amount,
+                transaction_type=t.transaction_type,
+                transaction_date=t.transaction_date,
+                description=t.description,
+                bank_id=t.bank.bank_name,
+                category_id=t.category.category_name,
+                subcategory_id=t.subcategory.subcategory_name
+
+            )
+            for t in all_transactions]
         print(all_transactions)
         # return all_transactions
         return Response(status_code=status.HTTP_200_OK, is_success=True, message="Get All Transactions Successfully", result=result)
